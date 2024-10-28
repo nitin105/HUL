@@ -486,7 +486,6 @@ class CameraPreviewFragment : Fragment() {
         val rotatedBitmap =
             Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
-
         // Save the rotated bitmap back to the file
         FileOutputStream(photoFile).use { out ->
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
@@ -507,10 +506,14 @@ class CameraPreviewFragment : Fragment() {
         if (bundle.getString("visitData") != null) {
             bundle.putString("visitData", bundle.getString("visitData"))
         }
-        findNavController().navigate(
-            R.id.action_cameraPreviewFragment_to_imagePreviewFragment,
-            bundle
-        )
+        val navController = findNavController()
+        if (navController.currentDestination?.id != R.id.imagePreviewFragment) {
+            navController.navigate(R.id.action_cameraPreviewFragment_to_imagePreviewFragment,bundle)
+        }
+//        findNavController().navigate(
+//            R.id.action_cameraPreviewFragment_to_imagePreviewFragment,
+//            bundle
+//        )
     }
 
     private var videoCapture: VideoCapture<Recorder>? = null

@@ -1530,43 +1530,54 @@ class DashboardFragment : Fragment(), ApiHandler, RetryInterface, DashboardFragm
     override fun redirectToAttendence(projectInfo: ProjectInfo) {
 
         Log.d("projectInfo", "redirectToAttendence: ${projectInfo}")
+        Log.d("userInfo", "redirectToAttendence: ${userInfo}")
+        Log.d("userInfo.didUsermarkedAttendence", "redirectToAttendence: ${userInfo.didUsermarkedAttendence}")
         if (userInfo.didUsermarkedAttendence == true) {
-
             if (projectInfo.visit_status.equals("SUBMITTED", true)) {
-                getSchoolVisitsCompleted(projectInfo.location_id!!.toInt())
+                getSchoolVisitsCompleted(projectInfo.location_id?.toIntOrNull() ?: return)
                 projectInfoCompleted = projectInfo
                 return
             }
+            if(projectInfo.visit_status.equals(null)){
+                val bundle = Bundle()
+                bundle.putString("projectInfo", Gson().toJson(projectInfo))
+                findNavController().navigate(
+                    R.id.action_dashboardFragment_to_attendenceFragment,
+                    bundle
+                )
+            }else{
+                val bundle = Bundle()
+                if (projectInfo.itemtype.equals("local")) {
+                    val listType: Type = object : TypeToken<List<ProjectInfo?>?>() {}.type
+                    selectedSchoolCode = Gson().fromJson(projectInfo.selectedSchoolCode, SchoolCode::class.java)
+                    visitList = Gson().fromJson(projectInfo.visitList,listType)
+                }
+                var uDiceCode = ""
+                uDiceCode = if (selectedSchoolCode?.external_id1 != null) {
+                    selectedSchoolCode?.external_id1!!
+                } else {
+                    selectedSchoolCode?.external_id2.toString()
+                }
+                bundle.putString(
+                    "uDiceCode",
+                    uDiceCode
+                )
+                bundle.putString(
+                    "schoolInformation",
+                    Gson().toJson(selectedSchoolCode)
+                )
+                bundle.putString(
+                    "visitList",
+                    Gson().toJson(visitList)
+                )
+                bundle.putString("localData", projectInfo.localString)
+                findNavController().navigate(
+                    R.id.action_schoolCodeFragment_to_schoolFormFragment,
+                    bundle
+                )
+            }
 
-            val bundle = Bundle()
-            if (projectInfo.itemtype.equals("local")) {
-                val listType: Type = object : TypeToken<List<ProjectInfo?>?>() {}.type
-                selectedSchoolCode = Gson().fromJson(projectInfo.selectedSchoolCode, SchoolCode::class.java)
-                visitList = Gson().fromJson(projectInfo.visitList,listType)
-            }
-            var uDiceCode = ""
-            uDiceCode = if (selectedSchoolCode?.external_id1 != null) {
-                selectedSchoolCode?.external_id1!!
-            } else {
-                selectedSchoolCode?.external_id2.toString()
-            }
-            bundle.putString(
-                "uDiceCode",
-                uDiceCode
-            )
-            bundle.putString(
-                "schoolInformation",
-                Gson().toJson(selectedSchoolCode)
-            )
-            bundle.putString(
-                "visitList",
-                Gson().toJson(visitList)
-            )
-            bundle.putString("localData", projectInfo.localString)
-            findNavController().navigate(
-                R.id.action_schoolCodeFragment_to_schoolFormFragment,
-                bundle
-            )
+
         } else {
             val bundle = Bundle()
             bundle.putString("projectInfo", Gson().toJson(projectInfo))
@@ -1577,6 +1588,7 @@ class DashboardFragment : Fragment(), ApiHandler, RetryInterface, DashboardFragm
         }
 
     }
+
 
     override fun addToLocal(projectInfo: ProjectInfo) {
         if (dashboardViewModel.attendenceToday.value?.present == true) {
@@ -1613,8 +1625,6 @@ class DashboardFragment : Fragment(), ApiHandler, RetryInterface, DashboardFragm
     }
 
     fun redirectToCompleted(projectInfo: ProjectInfo) {
-
-
         val bundle = Bundle()
         var uDiceCode = ""
         uDiceCode = if (selectedSchoolCode?.external_id1 != null) {
@@ -1635,10 +1645,14 @@ class DashboardFragment : Fragment(), ApiHandler, RetryInterface, DashboardFragm
             Gson().toJson(visitList)
         )
         bundle.putString("localData", projectInfo.localString)
-        findNavController().navigate(
-            R.id.action_schoolCodeFragment_to_schoolFormFragment,
-            bundle
-        )
+        val navController = findNavController()
+        if (navController.currentDestination?.id != R.id.schoolFormFragment) {
+            navController.navigate(R.id.action_schoolCodeFragment_to_schoolFormFragment,bundle)
+        }
+//        findNavController().navigate(
+//            R.id.action_schoolCodeFragment_to_schoolFormFragment,
+//            bundle
+//        )
         visitList = ArrayList()
         projectInfoCompleted = ProjectInfo()
 

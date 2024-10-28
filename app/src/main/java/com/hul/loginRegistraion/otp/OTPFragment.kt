@@ -137,46 +137,58 @@ class OTPFragment : Fragment(), ApiHandler, RetryInterface {
 
     fun getLogo() {
 
-        if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
-            //setProgressDialog(requireContext(), "Sending OTP")
-            apiController.getApiResponse(
-                this,
-                RequestModel(projectId = userInfo.projectId),
-                ApiExtentions.ApiDef.GET_LOGO.ordinal
-            )
-        } else {
-            noInternetDialogue(requireContext(), ApiExtentions.ApiDef.GET_LOGO.ordinal, this)
+        try {
+            if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
+                //setProgressDialog(requireContext(), "Sending OTP")
+                apiController.getApiResponse(
+                    this,
+                    RequestModel(projectId = userInfo.projectId),
+                    ApiExtentions.ApiDef.GET_LOGO.ordinal
+                )
+            } else {
+                noInternetDialogue(requireContext(), ApiExtentions.ApiDef.GET_LOGO.ordinal, this)
+            }
         }
-
+        catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     fun getBanner() {
 
-        if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
-            //setProgressDialog(requireContext(), "Sending OTP")
-            apiController.getApiResponse(
-                this,
-                RequestModel(projectId = userInfo.projectId),
-                ApiExtentions.ApiDef.GET_BANNER.ordinal
-            )
-        } else {
-            noInternetDialogue(requireContext(), ApiExtentions.ApiDef.GET_BANNER.ordinal, this)
-        }
+       try {
+           if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
+               //setProgressDialog(requireContext(), "Sending OTP")
+               apiController.getApiResponse(
+                   this,
+                   RequestModel(projectId = userInfo.projectId),
+                   ApiExtentions.ApiDef.GET_BANNER.ordinal
+               )
+           } else {
+               noInternetDialogue(requireContext(), ApiExtentions.ApiDef.GET_BANNER.ordinal, this)
+           }
+       }catch (e: Exception){
+           e.printStackTrace()
+       }
 
     }
 
     fun loginUser() {
 
-        if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
-            setProgressDialog(requireContext(), "Sending OTP")
-            apiController.getApiResponse(
-                this,
-                loginModel(),
-                ApiExtentions.ApiDef.LOGIN.ordinal
-            )
-        } else {
-            noInternetDialogue(requireContext(), ApiExtentions.ApiDef.LOGIN.ordinal, this)
-        }
+       try {
+           if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
+               setProgressDialog(requireContext(), "Sending OTP")
+               apiController.getApiResponse(
+                   this,
+                   loginModel(),
+                   ApiExtentions.ApiDef.LOGIN.ordinal
+               )
+           } else {
+               noInternetDialogue(requireContext(), ApiExtentions.ApiDef.LOGIN.ordinal, this)
+           }
+       }catch (e: Exception){
+           e.printStackTrace()
+       }
 
     }
 

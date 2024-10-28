@@ -46,6 +46,7 @@ import javax.inject.Inject
 class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
 
     private var _binding: FragmentLoginWithPinBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var loginRegisterComponent: LoginRegisterComponent
 
@@ -60,9 +61,8 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
 
     lateinit var loginRegistrationInterface: LoginRegistrationInterface
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,10 +88,10 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND) {
                 // Handle Done or Send action key press
                 // Do something
-                if(loginWithPINViewModel.loginEnabled.value!! && !loginWithPINViewModel.buttonClicked.value!!)
-                {
+                if (loginWithPINViewModel.loginEnabled.value == true && !loginWithPINViewModel.buttonClicked.value!!) {
                     loginUser()
                 }
+
                 return@OnEditorActionListener true
             }
             false
@@ -101,6 +101,8 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
         return binding.root
 
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -154,16 +156,21 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
 
     fun loginUser() {
 
-        if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
-            setProgressDialog(requireContext(), "Sending OTP")
-            apiController.getApiResponse(
-                this,
-                loginModel(),
-                ApiExtentions.ApiDef.SEND_OTP.ordinal
-            )
-        } else {
-            noInternetDialogue(requireContext(), ApiExtentions.ApiDef.SEND_OTP.ordinal, this)
-        }
+       try {
+           if (ConnectionDetector(requireContext()).isConnectingToInternet()) {
+               setProgressDialog(requireContext(), "Sending OTP")
+               apiController.getApiResponse(
+                   this,
+                   loginModel(),
+                   ApiExtentions.ApiDef.SEND_OTP.ordinal
+               )
+           } else {
+               noInternetDialogue(requireContext(), ApiExtentions.ApiDef.SEND_OTP.ordinal, this)
+           }
+       }catch (e: Exception) {
+           Log.e("API_ERROR", "Error during API call: ${e.message}")
+           Toast.makeText(requireContext(), "Error sending OTP", Toast.LENGTH_LONG).show()
+       }
 
     }
 
@@ -173,12 +180,13 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
             type = "login"
         )
     }
-
-
     fun redirectToOTP() {
-        val bundle = Bundle()
-        bundle.putString("loginId", loginWithPINViewModel.loginId.value)
-        findNavController().navigate(R.id.action_LoginWithPIN_to_OTPFragment, bundle)
+        val navController = findNavController()
+        if (navController.currentDestination?.id != R.id.OTPFragment) {
+            val bundle = Bundle()
+            bundle.putString("loginId", loginWithPINViewModel.loginId.value)
+            navController.navigate(R.id.action_LoginWithPIN_to_OTPFragment,bundle)
+        }
     }
 
     private fun redirectToDashboard() {
@@ -249,7 +257,7 @@ class LoginWithPIN : Fragment(), ApiHandler, RetryInterface {
             ApiExtentions.ApiDef.SEND_OTP -> {
                 val model: ResponseModel = Gson().fromJson(o,ResponseModel::class.java)
                 Log.d("", "onApiSuccess: ${model}")
-                if (!model.error) {
+                if (!model.error ) {
 
 //                    userInfo.authToken = model.data!!.get("auth_token").toString() // for active session
 //                    userInfo.loginId = model.data!!.get("mobile_no").toString()

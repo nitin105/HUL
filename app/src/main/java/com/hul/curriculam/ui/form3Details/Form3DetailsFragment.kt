@@ -172,6 +172,7 @@ class Form3DetailsFragment : Fragment(), ApiHandler, RetryInterface {
                     )
                 }
                 Log.d("form3ViewModel.visitData", "onApiSuccess: ${form3ViewModel.visitData.value?.visit_3?.visit_image_3?.value}")
+                Log.d("form3ViewModel.visitData", "onApiSuccess: ${form3ViewModel.visitData.value?.visit_3}")
 
                 if (form3ViewModel.visitData.value?.visit_3?.visit_image_3?.value != null) {
                     loadImage(

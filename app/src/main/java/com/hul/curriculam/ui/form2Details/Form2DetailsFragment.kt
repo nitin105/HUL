@@ -154,6 +154,7 @@ class Form2DetailsFragment : Fragment(), ApiHandler, RetryInterface {
                     ), RequestModel::class.java)
                     form2ViewModel.visitData.value!!.visit_2 = requestModel.visitData
                 }
+                Log.d("TAG", "onApiSuccess: ${form2ViewModel.visitData.value}")
                 form2ViewModel.uDiceCode.value = form2ViewModel.visitData.value?.visit_2?.u_dice_code!!.value.toString()
                 fillData()
 
@@ -211,12 +212,16 @@ class Form2DetailsFragment : Fragment(), ApiHandler, RetryInterface {
     }
 
     private fun fillData() {
+        Log.d("Hardik", "fillData: ${form2ViewModel.visitData.value?.visit_2}")
         binding.txtUdiceCode.text = form2ViewModel.uDiceCode.value
         binding.txtSchoolName.text = form2ViewModel.visitData.value?.visit_2?.school_name!!.value.toString()
         binding.txtNoOfBooksGiven.text =
             form2ViewModel.projectInfo.value?.number_of_books_distributed.toString()
         binding.txtCurriculamOnTrack.text =
-            if (form2ViewModel.visitData.value?.visit_2?.mobile_number_of_the_school_representative_who_collected_the_books?.value == 1) "Yes" else "No"
+            if (form2ViewModel.visitData.value?.visit_2?.curriculum_on_track?.value == true) "Yes" else "No"
+
+//        binding.txtCurriculamOnTrack.text =
+//            if (form2ViewModel.visitData.value?.visit_2?.mobile_number_of_the_school_representative_who_collected_the_books?.value == 1) "Yes" else "No"
         binding.txtNameOfSchoolRepresentative.text =
             form2ViewModel.visitData.value?.visit_2?.name_of_the_school_representative_who_collected_the_books?.value?.toString() ?: ""
 

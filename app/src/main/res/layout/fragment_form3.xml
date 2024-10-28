@@ -73,16 +73,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtNameOfSchoolRepresentative"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/public_sans"
-                android:lineHeight="20dp"
-                android:textColor="#444050"
-                android:textFontWeight="700"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,6 +121,17 @@
                 android:textColor="#6d6b77"
                 android:textFontWeight="400"
                 android:textSize="13sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/public_sans"
+                android:lineHeight="20dp"
+                android:id="@+id/txtRemark"
+                android:textColor="#444050"
+                android:textFontWeight="700"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -142,15 +144,16 @@
                 android:textSize="13sp" />
 
             <TextView
+                android:id="@+id/txtNameOfSchoolRepresentative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/public_sans"
                 android:lineHeight="20dp"
-                android:id="@+id/txtRemark"
                 android:textColor="#444050"
                 android:textFontWeight="700"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
 
             <TextView
                 android:layout_width="match_parent"

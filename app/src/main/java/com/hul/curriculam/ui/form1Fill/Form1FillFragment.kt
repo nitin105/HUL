@@ -882,7 +882,7 @@ class Form1FillFragment : Fragment(), ApiHandler, RetryInterface {
         //binding.proceed.isEnabled = false
 
         val totalTime = 20 * 60 * 1000L
-        //val totalTime =10000L
+//        val totalTime =10000L
 
         // Set initial time before starting the timer
         updateTimerText(totalTime)
@@ -892,7 +892,6 @@ class Form1FillFragment : Fragment(), ApiHandler, RetryInterface {
             override fun onTick(millisUntilFinished: Long) {
                 updateTimerText(millisUntilFinished)
             }
-
             override fun onFinish() {
                 binding.llTimer.visibility = View.GONE
                 form1FillViewModel.timerFinished.value = true
@@ -905,6 +904,7 @@ class Form1FillFragment : Fragment(), ApiHandler, RetryInterface {
     private fun updateTimerText(millisUntilFinished: Long) {
         val minutesLeft = millisUntilFinished / 1000 / 60
         val secondsLeft = (millisUntilFinished / 1000) % 60
+
         binding.txtClock.text = String.format("Submit in %d:%02d minutes", minutesLeft, secondsLeft)
     }
 

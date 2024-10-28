@@ -715,6 +715,7 @@ class Form3FillFragment : Fragment(), ApiHandler, RetryInterface {
         //binding.proceed.isEnabled = false
 
         val totalTime = 20 * 60 * 1000L
+//        val totalTime =1000L
 
         // Set initial time before starting the timer
         updateTimerText(totalTime)

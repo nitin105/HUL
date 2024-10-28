@@ -49,8 +49,8 @@
     </LinearLayout>
     <ImageView
         android:id="@+id/chevron"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
         android:src="@mipmap/chevron"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
